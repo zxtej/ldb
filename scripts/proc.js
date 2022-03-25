@@ -40,7 +40,7 @@ global.override.block(LogicBlock, {
 					this.curr_stepwise = stepwise ? this.executor : null;
 					
 					stepwise = this.curr_stepwise == this.executor;
-					button2.style.imageUp = stepwise ? Icon.lockOpen : Icon.rightOpen;
+					button2.style.imageUp = stepwise ? Icon.rightOpen : Icon.lockOpen;
 					tooltip1.container.visible = stepwise;
 					tooltip2.container.visible = !stepwise;
 				} else if(this.curr_stepwise == this.executor && this.executor.initialized()){
@@ -56,7 +56,7 @@ global.override.block(LogicBlock, {
 			button2.addListener(tooltip1);
 			button2.addListener(tooltip2);
 			let stepwise = this.curr_stepwise == this.executor;
-			button2.style.imageUp = stepwise ? Icon.lockOpen : Icon.rightOpen;
+			button2.style.imageUp = stepwise ? Icon.rightOpen : Icon.lockOpen;
 			tooltip1.container.visible = stepwise;
 			tooltip2.container.visible = !stepwise;
 		}).center();
