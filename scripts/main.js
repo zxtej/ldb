@@ -8,6 +8,6 @@ global.ldbTipNo = function(tip, cell) {
 		}
 	}
 };
-require("ldb/mem");
-require("ldb/proc");
-require("ldb/disp");
+require("ldbe/mem");
+require("ldbe/proc");
+require("ldbe/disp");

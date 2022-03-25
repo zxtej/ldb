@@ -94,5 +94,5 @@ global.override.block(LogicDisplay, {
 		}).colspan(3).pad(10);
 	}
 }, block => {
-	block.configurable = true;
+	//block.configurable = false;
 });

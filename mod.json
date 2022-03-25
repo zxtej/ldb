@@ -1,11 +1,11 @@
 {
-	"name": "ldb",
-	"displayName": "[purple]Logic [gray]Debugger",
-	"author": "DeltaNedas",
-	"description": "Adds clientside logic debugging tools.\n[stat]Requires [#00aaff]DeltaNedas/override-lib[].",
-	"repo": "DeltaNedas/ldb",
+	"name": "ldbe",
+	"displayName": "[#77dd77]Logic [gray]Debugger Extended",
+	"author": "DeltaNedas, zxtej",
+	"description": "Logic Debugger by DeltaNedas, extended by zxtej.\nAdds clientside logic debugging tools.\n[stat]Requires [#00aaff]DeltaNedas/override-lib[].",
+	"repo": "zxtej/ldb",
 	"hidden": true,
-	"version": "1.3.3",
+	"version": "1.3.3.1",
 	"minGameVersion": 120,
 	"dependencies": ["override-lib"]
 }
