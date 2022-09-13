@@ -11,22 +11,23 @@ global.override.block(LogicBlock, {
 
 		this.super$buildConfiguration(buttons);
 
-		const collapserButton = buttons.button(Icon.downOpen, Styles.clearTransi, () => {
+		const collapserButton = buttons.button(Icon.downOpen, Styles.cleari, () => {
 			opened = !opened;
 			collapserButton.style.imageUp = opened ? Icon.upOpen : Icon.downOpen;
 		}).size(40).tooltip("vars").get();
 
-		buttons.button(Icon.rotate, Styles.clearTransi, () => {
+		buttons.button(Icon.rotate, Styles.cleari, () => {
 			if (Core.input.shift()){
 				if (this.executor.vars[0] !== undefined) {
 					this.executor.vars[0].numval = 0;
 				}
 			} else {
 				this.updateCode(this.code);
+				this.updateLdbVar(collapser);
 			}
 		}).size(40).center().tooltip("refresh (shift+click for reset counter)");
 
-		const button2 = buttons.button(this.curr_stepwise == this.executor ? Icon.rightOpen : Icon.lockOpen, Styles.clearTransi, () => {
+		const button2 = buttons.button(this.curr_stepwise == this.executor ? Icon.rightOpen : Icon.lockOpen, Styles.cleari, () => {
 			if(Core.input.shift()){
 				let stepwise = this.curr_stepwise != this.executor;
 				this.curr_stepwise = stepwise ? this.executor : null;
@@ -50,16 +51,23 @@ global.override.block(LogicBlock, {
 		tooltip2.container.visible = !stepwise;
 
 		table.row();
+		var collapser = null;
 		table.collapser(c => {
+			collapser = c;
 			c.background(Styles.black6).left().margin(10);
-			for (let v of this.executor.vars) {
-				// Only show the constant @unit
-				if (!v.constant || v.name == "@unit") {
-					c.label(this.ldbVarVal(v)).labelAlign(Align.left).fillX();
-					c.row();
-				}
-			}
+			this.updateLdbVar(c);
 		}, false, () => opened).top().left().width(300).touchable(() => Touchable.disabled).self(c => c.height(c.get().getChildren().first().getPrefHeight())) // Match inner table's target height, prevent blocking clicks
+	},
+
+	updateLdbVar(c) {
+		c.clearChildren();
+		for (let v of this.executor.vars) {
+			// Only show the constant @unit
+			if (!v.constant || v.name == "@unit") {
+				c.label(this.ldbVarVal(v)).labelAlign(Align.left).fillX();
+				c.row();
+			}
+		}
 	},
 
 	ldbVarVal: v => () => {
