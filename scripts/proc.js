@@ -1,27 +1,53 @@
 global.override.block(LogicBlock, {
+	updateTile() {
+		let prev_enabled = this.enabled;
+		this.enabled = this.enabled && !(this.curr_stepwise == this.executor);
+		this.super$updateTile();
+		this.enabled = prev_enabled;
+	},
 	buildConfiguration(table) {
 		let opened = false; // Whether the collapser is opened
 		const buttons = table.table().get(); // Put all buttons in a nested table to fix spacing
-		this.super$buildConfiguration(buttons); // Pass the button table
+
+		this.super$buildConfiguration(buttons);
 
 		const collapserButton = buttons.button(Icon.downOpen, Styles.clearTransi, () => {
 			opened = !opened;
 			collapserButton.style.imageUp = opened ? Icon.upOpen : Icon.downOpen;
 		}).size(40).tooltip("vars").get();
 
-		global.ldbTipNo("restart",
-			buttons.button(Icon.rotate, Styles.clearTransi, () => {
+		buttons.button(Icon.rotate, Styles.clearTransi, () => {
+			if (Core.input.shift()){
 				if (this.executor.vars[0] !== undefined) {
 					this.executor.vars[0].numval = 0;
 				}
-			}).size(40)
-		);
-
-		global.ldbTipNo("reset",
-		buttons.button(Icon.trash, Styles.clearTransi, () => {
+			} else {
 				this.updateCode(this.code);
-			}).size(40)
-		);
+			}
+		}).size(40).center().tooltip("refresh (shift+click for reset counter)");
+
+		const button2 = buttons.button(this.curr_stepwise == this.executor ? Icon.rightOpen : Icon.lockOpen, Styles.clearTransi, () => {
+			if(Core.input.shift()){
+				let stepwise = this.curr_stepwise != this.executor;
+				this.curr_stepwise = stepwise ? this.executor : null;
+
+				stepwise = this.curr_stepwise == this.executor;
+				button2.style.imageUp = stepwise ? Icon.rightOpen : Icon.lockOpen;
+				tooltip1.container.visible = stepwise;
+				tooltip2.container.visible = !stepwise;
+			} else if(this.curr_stepwise == this.executor && this.executor.initialized()){
+				this.executor.runOnce();
+			}
+		}).size(40).center().get();
+
+		const tooltip1 = Tooltip.Tooltips.getInstance().create("step forward (shift+click to unlock)");
+		const tooltip2 = Tooltip.Tooltips.getInstance().create("shift+click to lock");
+		button2.addListener(tooltip1);
+		button2.addListener(tooltip2);
+		let stepwise = this.curr_stepwise == this.executor;
+		button2.style.imageUp = stepwise ? Icon.rightOpen : Icon.lockOpen;
+		tooltip1.container.visible = stepwise;
+		tooltip2.container.visible = !stepwise;
 
 		table.row();
 		table.collapser(c => {
@@ -46,4 +72,6 @@ global.override.block(LogicBlock, {
 
 		return v.name + ": " + v.numval;
 	},
+
+	curr_stepwise: null
 });
